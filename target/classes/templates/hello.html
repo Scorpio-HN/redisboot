@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>hello</title>
+    <style>
+        .odd{background-color: aquamarine}
+
+    </style>
+    <script th:inline="javascript">
+        var name=[[${userName}]];
+        alert("name:"+name);
+
+    </script>
+</head>
+<body>
+
+<h1>thymeleaf--hello</h1>
+<p th:text="'你好：'+${userName}+'！！'">取出普通变量：</p>
+<hr/>
+<div th:text="${session.stu.sname}" th:style="'width:'+@{80.0/100*100}+'%;border:solid 1px red;background-color:yellow;'">从session获取对象的属性</div>
+<hr/>
+
+<table border="1" cellpadding="0"cellspacing="0">
+    <tr>
+        <th>序号</th>
+        <th>姓名</th>
+        <th>邮箱</th>
+        <th>日期</th>
+        <th>比较</th>
+        <th>选择</th>
+    </tr>
+
+    <tr th:each="stu,state:${all}" th:class="${state.odd}?'odd'">
+        <td th:text="${stu.sid}">序号</td>
+        <td th:text="${#strings.substring(stu.sname,0,2)}">姓名</td>
+        <td th:text="${stu.semail}">邮箱</td>
+        <td th:text="${#dates.format(stu.sbornd,'yyyy-MM-dd')}">日期</td>
+        <td th:text="${state.index==0}?'ok':'no'">比较运算</td>
+        <!--if else  比较可以写外面也可以写里面-->
+        <td th:if="${state.index} lt 3" th:text="老大">选择-if</td>
+        <td th:unless="${state.index lt 3}" th:text="小弟">选择-else</td>
+    </tr>
+
+</table>
+数字：<input type="text" th:value="${#numbers.formatDecimal('12.345678',1,3)}">
+
+<hr/>
+<select name="select01">
+    <option th:each="stu:${all}" th:value="${stu.sname}" th:text="${stu.sname}"}>请选择</option>
+</select>
+<hr/>
+<select name="select02" >
+    <option th:each="stu:${all}" th:value="${stu.sname}" th:selected="${stu.sname == '肖小宝'}" th:text="${stu.sname}"}>请选择</option>
+</select>
+<hr/>
+<select name="select03" th:field="*{stu.sname}" >
+    <option th:each="st:${all}" th:value="${st.sname}"  th:text="${st.sname}"}>请选择</option>
+</select>
+
+<hr/>
+<p th:text="${mp.aa}">map</p>
+<p th:text="${mp.bb}">map</p>
+<p th:utext="${mp.bb}">map</p>
+<p th:text="${mp.cc.sname}">map</p>
+
+<hr/>
+获取map中嵌套的集合
+<p th:each="stu:${mp.dd}" th:text="${stu.sname}"></p>-->
+<!--<p th:text="${mp.dd}">xx</p>-->
+
+<h1>固定死值显示</h1>
+<img src="images/btn-confirm.gif" th:src="${'images/btn-fastbuy.gif'}" alt="图片显示失败"><br/>
+<hr/>
+<img src="images/btn-fastbuy.gif" th:src="${'images/btn-confirm.gif'}"  alt="图片显示失败"><br/>
+<hr/>
+<img src="images/btn-fastbuy.gif" th:src="@{'images/btn-confirm.gif'}"   alt="图片显示失败"><br/>
+<hr/>
+<h1>超链接使用？传递参数，要使用()</h1>
+<a th:href="@{'test/'+${stu.sname}(id=${stu.sid},name=${stu.sname})}">超链接</a>
+
+<div th:include="show.html"></div>
+
+<iframe src="http://www.baidu.com" th:width="800px"></iframe>
+</body>
+</html>

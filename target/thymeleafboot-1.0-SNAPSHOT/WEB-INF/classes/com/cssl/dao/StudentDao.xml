@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cssl.dao.StudentDao">
+
+    <select id="findAll" resultType="com.cssl.entity.Student">
+     SELECT * FROM student s ,classNum c WHERE s.scid =c.cid ORDER BY sid DESC
+    </select>
+
+    <select id="findAllClass" resultType="com.cssl.entity.Student">
+        SELECT * FROM classNum
+     </select>
+
+    <select id="mohu" resultType="com.cssl.entity.Student" parameterType="map">
+        SELECT * FROM student s ,classNum c WHERE s.scid =c.cid
+        <if test="sname!=null">
+            and sname LIKE CONCAT(CONCAT('%',#{sname}),'%')
+        </if>
+        <if test="cid!=null and cid!=0">
+            and s.scid=#{cid}
+        </if>
+
+    </select>
+
+    <delete id="delStu">
+        DELETE FROM student WHERE sid=#{sid}
+    </delete>
+
+    <insert id="addStu" parameterType="com.cssl.entity.Student">
+      INSERT INTO `student`(`sname`,`semail`,`sbornd`,`scid`)
+	  VALUES(#{sname},#{semail},#{sbornd},#{scid})
+    </insert>
+
+    <select id="findById" resultType="com.cssl.entity.Student" parameterType="int">
+                  SELECT * FROM student s ,classNum c WHERE s.scid =c.cid  and s.sid=#{sid}
+     </select>
+
+    <update id="updateStu" parameterType="com.cssl.entity.Student">
+
+    UPDATE `student`
+            SET
+            `sname` = #{sname} ,
+            `semail` = #{semail} ,
+            `sbornd` = #{sbornd} ,
+            `scid` = #{scid}
+            WHERE
+            `sid` =  #{sid} ;
+    </update>
+
+
+</mapper>

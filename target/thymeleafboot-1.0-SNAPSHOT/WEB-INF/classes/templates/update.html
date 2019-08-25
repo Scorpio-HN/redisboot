@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改页面</title>
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            loadAllClass();
+           var u= getRequest();
+            //根据传入id,查询对应的员工对象 回显到页面
+            $.post("findById",u,function (data) {
+                $("#sid").val(data.sid);
+                $("#sname").val(data.sname);
+                $("#semail").val(data.semail);
+                $("#sbornd").val(data.sbornd);
+                $('#scid>option[value='+data.scid+']').prop('selected',true);
+            },"json");
+        })
+        //加载所有的班级
+        function loadAllClass(){
+            $.getJSON("findAllClass",function (data){
+                for(var i=0;i<data.length;i++){
+                    var op="<option value='"+data[i].cid+"'>"+data[i].cname+"</option>";
+                    $("#scid").append(op);
+                }
+            })
+        }
+        //返回?后的json对象
+        function getRequest() {
+            //获取url中"?"符后的字串
+            var url = location.search;
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                var strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+                }
+            }
+            return theRequest;
+        }
+    </script>
+</head>
+<body>
+<h1>修改页面</h1>
+<form action="updateStu" method="post">
+    <table border="1">
+        <tr>
+            <td>学生编号</td>
+            <td><input type="text" name="sid" id="sid" readonly></td>
+        </tr>
+        <tr>
+            <td>学生姓名</td>
+            <td><input type="text" name="sname" id="sname"></td>
+        </tr>
+        <tr>
+            <td>学生邮箱</td>
+            <td><input type="email" name="semail" id="semail"></td>
+        </tr>
+        <tr>
+            <td>学生生日</td>
+            <td><input type="date" name="sbornd" id="sbornd"/></td>
+        </tr>
+        <tr>
+            <td>班级名称</td>
+            <td>
+                <select name="scid" id="scid" >
+                    <option value="0">-请选择-</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>操作</td>
+            <td>
+                <input type="submit" value="修改" >
+                <input type="button" value="返回" onclick="location.href='index.html'">
+            </td>
+        </tr>
+
+    </table>
+</form>
+</body>
+</html>

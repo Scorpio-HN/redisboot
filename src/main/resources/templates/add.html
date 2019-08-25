@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增页面</title>
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            loadAllClass();
+        })
+
+        
+        function checkInfo(form) {
+            if(form.sname.value==""){
+                alert("用户名不能为空");
+                form.sname.focus();
+                return false;
+            }
+            if(form.semail.value==""){
+                alert("请填写邮箱");
+                return false;
+            }
+            if(form.sbornd.value==""){
+                alert("请填写生日");
+                return false;
+            }
+            if(form.scid.value=='0'){
+                alert("请选择班级");
+                return false;
+            }
+            return true;
+        }
+        
+        //加载所有的班级
+        function loadAllClass(){
+            $.getJSON("findAllClass",function (data){
+                for(var i=0;i<data.length;i++){
+                    var op="<option value='"+data[i].cid+"'>"+data[i].cname+"</option>";
+                    $("#scid").append(op);
+                }
+            })
+        }
+
+    </script>
+</head>
+<body>
+<h1>新增页面</h1>
+<form action="addStu" method="post" onsubmit="return checkInfo(this)">
+    <table border="1">
+        <tr>
+            <td>学生姓名</td>
+            <td><input type="text" name="sname"></td>
+        </tr>
+        <tr>
+            <td>学生邮箱</td>
+            <td><input type="email" name="semail"></td>
+        </tr>
+        <tr>
+            <td>学生生日</td>
+            <td><input type="date"  name="sbornd"/></td>
+        </tr>
+        <tr>
+            <td>班级名称</td>
+            <td>
+                <select name="scid" id="scid" >
+                    <option value="1">-请选择-</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>操作</td>
+            <td>
+                <input type="submit" value="新增" >
+                <input type="button" value="返回" onclick="location.href='index.html'">
+            </td>
+        </tr>
+
+    </table>
+
+</form>
+</body>
+</html>
